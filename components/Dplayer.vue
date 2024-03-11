@@ -32,41 +32,41 @@ onMounted(async () => {
   const { default: DPlayer } = await import("dplayer-lite");
   const { default: Hls } = await import("hls.js");
 
-  if (Hls.isSupported()) {
-    dp = new DPlayer({
-      container: dplayerContainer.value,
-      screenshot: false,
-      video: {
-        url: props.videoUrl,
-        pic: props.pic,
-        thumbnails: props.pic,
-        type: "customHls",
-        customType: {
-          customHls: function (video) {
-            if (Hls.isSupported()) {
-              const hls = new Hls();
-              hls.loadSource(video.src);
-              hls.attachMedia(video);
-            }
-          },
+  dp = new DPlayer({
+    container: dplayerContainer.value,
+    screenshot: false,
+    video: {
+      url: props.videoUrl,
+      pic: props.pic,
+      thumbnails: props.pic,
+      type: "customHls",
+      customType: {
+        customHls: function (video) {
+          if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(video.src);
+            hls.attachMedia(video);
+          }
         },
       },
-      autoplay: true,
-      controls: true,
-      live: true,
-      theme: "#ffd900",
-    });
+    },
+    autoplay: true,
+    controls: true,
+    live: true,
+    theme: "#ffd900",
+  });
 
-    // Save the current time of the video player whenever it changes
-    dp.on('timeupdate', () => {
-      sessionStorage.setItem('videoTime', dp.video.currentTime);
-    });
+  // Save the current time of the video player whenever it changes
+  dp.on('timeupdate', () => {
+    sessionStorage.setItem('videoTime', dp.video.currentTime);
+  });
 
-    // Restore the saved state of the video player
-    const videoTime = sessionStorage.getItem('videoTime');
-    if (videoTime) {
-      dp.video.currentTime = videoTime;
-    }
+  // Restore the saved state of the video player
+  const videoTime = sessionStorage.getItem('videoTime');
+  if (videoTime) {
+    dp.video.currentTime = videoTime;
+  }
+  if (Hls.isSupported()) {
   }
 });
 </script>
